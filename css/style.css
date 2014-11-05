@@ -1,0 +1,54 @@
+body {
+    background-color:#343434;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-weight: 300;
+    font-size: 15px;
+}
+
+header {
+    text-align: center;
+    color: #fff;
+}
+
+nav {
+    background-color: #4A9C47;
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.055);
+    color: #fff;
+    display: block;
+    overflow: hidden;
+    width: 150%;
+}
+
+nav ul {
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline-block;
+    list-style-type: none;
+
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -ms-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    transition: all 0.2s;
+}
+
+nav > ul > li > a {
+    colour: #aaa;
+    display: block;
+    line-height: 56px;
+    padding: 0 24px;
+    text-decoration: none;
+}
+
+nav > ul > li:hover {
+    background-color: rgb( 40, 44, 47);
+}
+
+nav > ul > li:hover > a {
+    color: rgb( 255, 255, 255 );
+}
+
+
