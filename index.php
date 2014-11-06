@@ -1,11 +1,8 @@
 <?php
+require("headers/main_header.php");
 require("headers/menu_header.php");
 ?>
-<html>
-<!doctype html>
-<head>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-</head>
+
 <body>
     <hr>
     <h2>Simple Search</h2>

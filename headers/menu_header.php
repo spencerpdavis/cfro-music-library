@@ -3,7 +3,7 @@
 </header>
 <nav>
     <ul>
-<li><a href="home.php">Home</a></li>
+<li><a href="index.php">Home</a></li>
 <li><a href="recent.php">Recently Added</a></li>
 <li><a href="search.php">Search Database</a></li>
 <li><a href="browse.php">Browse Database</a></li>
