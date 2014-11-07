@@ -1,17 +1,62 @@
 <?php
+// Open database
+$db = new SQLite3('C:\Users\Emily\AppData\Roaming\MediaMonkey\MM.db');
+if(!$db) {
+	echo $db->lastErrorMsg();
+} 
+if (!$db) die ($error);
+
+//Convert delphi time
+function convert_delphi($delphiDate){
+	$days = intval($delphiDate)-25568;
+	$fraction = '' + $delphiDate;
+	$fraction = substr($fraction, strpos($fraction, '.'));
+	$sec = $fraction * 24 * 60 * 60;
+	$date = date('F j, Y', mktime(0, 0, $sec, 1, $days, 1970));
+	return $date;
+}
+// Convert seconds to minutes:seconds
+
+function milliToSeconds($milli) {
+	$minutes = round($milli/60000, 0, PHP_ROUND_HALF_DOWN);
+	$seconds = round(($milli - ($minutes * 60)) / 1000) % 60;
+	$minSecs = $minutes . ':' . $seconds;
+	return $minSecs;
+}
 
 //Pagination function
 function paginate ($db, $query) {
+
     try {
         // Find how many items are in table
         $results = $db->query($query);
         $total = 0;
-		
 		while ($results->fetchArray())
 			$total++;
 		
-		echo $total;
-        // Items per page
+		// Find page to determine columns
+		$url = parse_url($_SERVER['REQUEST_URI'])["path"];
+		$exploded_page = explode('/', $url);
+		$page = substr(end($exploded_page), 0, -4);
+		echo $page;
+		
+		// Set columns
+		switch ($page) {
+			case "recent":
+				$column_names = array("Artist", "Album", "Genre", "Date Added");
+				$columns = array("Artist", "Album", "Genre", "DateAdded");
+				break;
+			case "Artist":
+				$column_names = array("Album", "Genre", "Date Added");
+				$columns = array("Album", "Genre", "DateAdded");
+				break;
+			case "album":
+				$column_names = array("Track Number", "Artist", "Song Title", "Length");
+				$columns = array("TrackNumber", "Artist", "SongTitle", "SongLength");
+				break;
+		}
+		
+		// Items per page
         $limit = 20;
 		
 		// Total pages
@@ -24,7 +69,7 @@ function paginate ($db, $query) {
             'min_range' => 1,
 			),
 		)));
-		echo $page;
+		
 		// Calculate offset for query
 		$offset = ($page - 1) * $limit;
 
@@ -41,7 +86,7 @@ function paginate ($db, $query) {
 
 		// Prepare paged query
 		$prepared_query = $query . ' LIMIT ' . $limit . ' OFFSET ' . $offset;
-		echo $prepared_query;
+		
 		$stmt = $db->prepare($prepared_query);
 
 		// Bind the query params
@@ -51,17 +96,35 @@ function paginate ($db, $query) {
 		$stmt_total = 0;
 		while ($stmt_result->fetchArray())
 			$stmt_total++;
-		echo $stmt_total;
+		
 		// Any results?
 		if ($stmt_total > 0) {
 			// Define how we want to fetch results
-			echo "Results: " . $stmt_total;
-			var_dump($stmt_result);
-			echo "Limit: " . $limit . "\nOffset: " . $offset . "\n";
-			
+			printf("<table align=center class=results>");
+			printf("<tr>");
+			foreach($column_names as $column) {
+				printf("<td>%s</td>", $column);
+			}
 			// Display the results
 			while ($entry = $stmt_result->fetchArray()) {
-				echo 'Artist: ' . $entry['AlbumArtist'];
+				printf("<tr>");
+				foreach($columns as $column) {
+					switch($column) {
+						case "DateAdded":
+							printf("<td>%s</td>", convert_delphi($entry[$column]));
+							break;
+						case "SongLength":
+							printf("<td>%s</td>", milliToSeconds($entry[$column]));
+							break;
+						case "Album":
+							printf("<td><a href='album.php?album=%s'>%s</td>", $entry['IDAlbum'], $entry[$column]);
+							break;
+						default:
+							printf("<td><a href='%s.php?%s=%s'>%s</td>", $column, $column, $entry['Artist'], $entry[$column]);
+							break;
+					}
+				}
+				printf("</tr>");
 			}
 			
 		} else {
