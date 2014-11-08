@@ -43,12 +43,17 @@ function paginate ($db, $query) {
 		// Set columns
 		switch ($page) {
 			case "recent":
+			case "browse":
 				$column_names = array("Artist", "Album", "Genre", "Date Added");
 				$columns = array("Artist", "Album", "Genre", "DateAdded");
 				break;
 			case "Artist":
 				$column_names = array("Album", "Genre", "Date Added");
 				$columns = array("Album", "Genre", "DateAdded");
+				break;
+			case "search":
+				$column_names = array("Song Title", "Artist", "Album", "Genre");
+				$columns = array("SongTitle", "Artist", "Album", "Genre");
 				break;
 			case "album":
 				$column_names = array("Track Number", "Artist", "Song Title", "Length");
