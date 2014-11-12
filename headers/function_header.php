@@ -1,6 +1,7 @@
 <?php
 // Open database
-$db = new SQLite3('C:\Users\Emily\AppData\Roaming\MediaMonkey\MM.db');
+require("settings.php");
+$db = new SQLite3($database_file);
 if(!$db) {
 	echo $db->lastErrorMsg();
 } 
@@ -56,8 +57,8 @@ function paginate ($db, $query) {
 				$columns = array("SongTitle", "Artist", "Album", "Genre");
 				break;
 			case "album":
-				$column_names = array("Track Number", "Artist", "Song Title", "Length");
-				$columns = array("TrackNumber", "Artist", "SongTitle", "SongLength");
+				$column_names = array("Track Number", "Artist", "Song Title", "Length", "YouTube");
+				$columns = array("TrackNumber", "Artist", "SongTitle", "SongLength", "YouTube");
 				break;
 		}
 		
@@ -124,6 +125,12 @@ function paginate ($db, $query) {
 						case "Album":
 							printf("<td><a href='album.php?album=%s'>%s</td>", $entry['IDAlbum'], $entry[$column]);
 							break;
+                        case "YouTube":
+                            $songTitle = str_replace(' ', '+', $entry['SongTitle']);
+                            $artist = str_replace(' ', '+', $entry['Artist']);
+                            
+                            printf("<td><a href='https://www.youtube.com/results?search_query=%s+%s' target='_blank'>YouTube</a></td>", $songTitle, $artist);
+                            break;
 						default:
 							printf("<td><a href='%s.php?%s=%s'>%s</td>", $column, $column, $entry['Artist'], $entry[$column]);
 							break;
