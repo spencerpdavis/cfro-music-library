@@ -9,7 +9,12 @@
 	$album_name = $db->query("SELECT Album FROM Songs WHERE IDAlbum COLLATE NOCASE = '$album' GROUP BY Album COLLATE NOCASE");
 	$album_name = $album_name->fetchArray();
 	$album_name = end($album_name);
-	printf("<h2>%s</h2>", $album_name);
+
+    $artist_name = $db->query("SELECT Artist FROM Songs WHERE IDAlbum COLLATE NOCASE = '$album' GROUP BY Artist COLLATE NOCASE");
+    $artist_name = $artist_name->fetchArray();
+    $artist_name = end($artist_name);
+
+	printf("<h2>%s - %s</h2>", $artist_name, $album_name);
 	
 	$query = "SELECT * FROM Songs WHERE IDAlbum = '$album' COLLATE NOCASE";
 	paginate($db, $query);

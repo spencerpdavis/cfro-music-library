@@ -45,20 +45,24 @@ function paginate ($db, $query) {
 		switch ($page) {
 			case "recent":
 			case "browse":
-				$column_names = array("Artist", "Album", "Genre", "Date Added");
-				$columns = array("Artist", "Album", "Genre", "DateAdded");
+            case "genre":
+				$column_names = array("Artist", "Album", "Genre", "Date Added", "CanCon");
+				$columns = array("Artist", "Album", "Genre", "DateAdded", "CanCon");
 				break;
+
 			case "Artist":
-				$column_names = array("Album", "Genre", "Date Added");
-				$columns = array("Album", "Genre", "DateAdded");
+				$column_names = array("Album", "Genre", "Date Added", "CanCon");
+				$columns = array("Album", "Genre", "DateAdded", "CanCon");
 				break;
+
 			case "search":
-				$column_names = array("Song Title", "Artist", "Album", "Genre");
-				$columns = array("SongTitle", "Artist", "Album", "Genre");
+				$column_names = array("Song Title", "Artist", "Album", "Genre", "CanCon");
+				$columns = array("SongTitle", "Artist", "Album", "Genre", "CanCon");
 				break;
+
 			case "album":
-				$column_names = array("Track Number", "Artist", "Song Title", "Length", "YouTube");
-				$columns = array("TrackNumber", "Artist", "SongTitle", "SongLength", "YouTube");
+				$column_names = array("Track #", "Artist", "Song Title", "Length", "YouTube", "CanCon");
+				$columns = array("TrackNumber", "Artist", "SongTitle", "SongLength", "YouTube", "CanCon");
 				break;
 		}
 		
@@ -131,9 +135,25 @@ function paginate ($db, $query) {
                             
                             printf("<td><a href='https://www.youtube.com/results?search_query=%s+%s' target='_blank'>YouTube</a></td>", $songTitle, $artist);
                             break;
-						default:
+                        case "CanCon":
+                            if($entry['Custom1']=='Yes' || $entry['Custom1']=='yes'){
+                                $CanCon = '&#x2713;';
+                            } else {
+                                $CanCon = '&#x2717;';
+                            }
+                            printf("<td>$CanCon</td>");
+                            break;
+                        case "TrackNumber":
+                            printf("<td>%s</td>", $entry[$column]);
+                            break;
+                        case "Genre":
+                            printf("<td><a href='browse.php?by=genre&genre=%s'>%s</a></td>", $entry[$column], $entry[$column]);
+                            break;
+						case "Artist":
 							printf("<td><a href='%s.php?%s=%s'>%s</td>", $column, $column, $entry['Artist'], $entry[$column]);
 							break;
+                        default:
+                            printf("<td>%s</td>", $entry[$column]);
 					}
 				}
 				printf("</tr>");
