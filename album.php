@@ -17,5 +17,11 @@
 	printf("<h2>%s - %s</h2>", $artist_name, $album_name);
 	
 	$query = "SELECT * FROM Songs WHERE IDAlbum = '$album' COLLATE NOCASE";
-	paginate($db, $query);
 ?>
+<body>
+    <article>
+    <?php
+    	paginate($db, $query);
+    ?>
+    </article>
+</body>

@@ -7,7 +7,9 @@
 ?>
 <body>
 	<h2>Recent Additions</h2>
+    <article>
 	<?php
 		paginate($db, $recent_query)
 	?>
+    </article>
 </body>

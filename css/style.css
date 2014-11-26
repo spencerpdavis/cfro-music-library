@@ -19,6 +19,16 @@ nav {
     width: 150%;
 }
 
+nav a {
+    color: white;
+    text-decoration: none;
+}
+
+nav a:hover{
+    color: #29FB75;
+    text-decoration: none;
+}
+
     nav ul {
         margin: 0;
         padding: 0;
@@ -110,4 +120,43 @@ nav {
                             background-color: rgba( 255, 255, 255, 0.1);
                         }
 
+article {
+    padding-top: 20px;
+    padding-bottom: 1px;
+    width: 80%;
+    background: white;
+    margin: 0 auto;
+}
 
+h2 {
+    margin-left: 10%;
+    color: white;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+article table {
+    padding-top: 0px;
+    margin-top: 0px;
+    background: #A9A9A9;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+table a {
+    color: #113F40;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background: #8C8C8C;
+    border: 1px solid black;
+}
+
+td {
+    border: 1px solid black;
+}
+
+#paging {
+    text-align: center;
+}

@@ -32,12 +32,10 @@
     } elseif($browse_by=="genre" && !is_null($_GET["genre"])){
         $genre = $_GET["genre"];
         $query = "SELECT * FROM Songs WHERE Genre LIKE '$genre' GROUP BY Album COLLATE NOCASE"; 
-        paginate($db, $query);
     
     } elseif($browse_by=="genre" && !is_null($_GET["CRTCcategory"])) {
         $cat = $_GET["CRTCcategory"];
         $query = "SELECT * FROM Songs WHERE Custom2 LIKE '$cat' GROUP BY Album COLLATE NOCASE";
-        paginate($db, $query);
  
     } elseif($browse_by=="Artist" || $browse_by=="Album") {
                    
@@ -51,7 +49,14 @@
     	if(isset($_GET['letter'])) {
 	    	$letter = $_GET['letter'];
     		$query = "SELECT * FROM Songs WHERE $browse_by LIKE '$letter%' GROUP BY Album COLLATE NOCASE";
-		    paginate($db, $query);
     	}
     }
 ?>
+
+<body>
+    <article>
+    <?php
+		paginate($db, $query);
+    ?>
+    </article>
+</body>
