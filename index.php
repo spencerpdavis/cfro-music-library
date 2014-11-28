@@ -4,15 +4,12 @@ require("headers/menu_header.php");
 ?>
 
 <body>
-    <hr>
-    <h2>Simple Search</h2>
-    <form method='GET' action='' name='simple_search'>
-        <input type=text name='search_term'>
-        <input type=submit value='Simple Search'>
-    </form>
-    <hr>
-    <h2>Advanced Search</h2>
-    <table border=0><tr><td align=right nowrap>
-    
+    <article>
+        <h3> Welcome to the Music Library!</h3>
+        You can search using the navigation bar above.
+        <strong>Please note:</strong> as there are legal issues with offering the actual music tracks online, we have added YouTube links to each of the songs to allow you to preview. <strong>Not all tracks will be available.</strong> The ones that are not will have to be previewed at the station.
+        If you have any questions, comments or suggestions, please contact Spencer at techassist [at] coopradio.org.
+
+        Enjoy!
+    </article>
 </body>
-</html>

@@ -5,6 +5,14 @@ body {
     font-size: 15px;
 }
 
+.cancon {
+    color: green;
+}
+
+.notCanCon {
+    color: red;
+}
+
 header {
     text-align: center;
     color: #fff;
@@ -120,12 +128,135 @@ nav a:hover{
                             background-color: rgba( 255, 255, 255, 0.1);
                         }
 
+.sidebar{
+    background: #A9A9A9;
+    width: 250px;
+    float: left;
+    margin-top: 5px;
+}
+
+.letterbar{
+    background: #A9A9A9;
+    width: 100%;
+    font-size: 20px;
+}
+
+.letterbar ul {
+    margin: 0;
+  border: 1px solid #bbb;
+  padding: 0;
+    list-style-type: none;
+    text-align: center;
+}
+
+.letterbar ul li {
+ border: 1px solid #bbb;
+   display: inline;
+}
+
+.letterbar ul li a {
+    text-decoration: none;
+    padding-left: .2em ;
+    padding-right: .2em;
+    color: #666;
+    background-color: #F0F0F0;  
+    text-size: 30px;
+}
+
+.letterbar ul li a:hover {
+    text-decoration: none;
+    background: #F8F8F8; 
+}
+    
+/* remove list style */
+.side-collapsible {
+    list-style: none;
+    font-family: 'HelveticaNeue', Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
+
+/* side-header line style and border*/
+.side-collapsible li.side-header {
+    color: #666;
+    padding: 4px 12px;
+    border: 1px solid #bbb;
+}
+
+/*set border for every line of menu and remove top border*/
+.side-collapsible li {
+    border: 1px solid #bbb;
+    border-top: 0;
+    margin: 0;
+    background: #F0F0F0;
+}
+
+/* remove decoration from text links and treat it as a block.*/
+.side-collapsible li a {
+    text-decoration: none;
+    color: #666;
+    display: block;
+    padding: 8px 12px;
+}
+
+/*remove underline*/
+.side-collapsible li a:hover {
+    background: #F8F8F8;
+    text-decoration: none;
+}
+
+/*remove list style (circles) for submenu*/
+.side-collapsible li ul {
+    list-style: none;
+    background: #D3D3D3;
+    display: none;
+    margin: 0;
+    padding: 0;
+}
+
+/*remove border and set only bottom border for submenu*/
+.side-collapsible li ul li {
+    margin: 0;
+    border: 0;
+    border-bottom: 1px solid #bbb;
+}
+
+/* remove bottom border from last element in submenu*/
+.side-collapsible li ul li a {
+    padding: 5px 10px;
+    display: block;
+    padding-left: 33px;
+    background: #D3D3D3;
+}
+
+/*remove text decoration for links*/
+.side-collapsible li ul li a:hover {
+    text-decoration: none;
+    background: #D9D9D9;
+}
+
+/*for menu which will have a submenu display*/
+.side-collapsible .side-dropdown > a {
+    background: url(../images/arrowdown.png) no-repeat right center !important;
+}
+
+/*set some hover colour on dropdown menu*/
+.side-collapsible .side-dropdown > a:hover {
+    background: #F8F8F8 url(../images/arrowdown.png) no-repeat right center !important;
+}
+
+form {
+    background: white;
+}
+
 article {
+    color: black;
     padding-top: 20px;
     padding-bottom: 1px;
-    width: 80%;
+    width: 650px;
     background: white;
     margin: 0 auto;
+    margin-left: 300px;
+    margin-top: 5px;
 }
 
 h2 {

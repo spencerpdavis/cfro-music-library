@@ -138,13 +138,15 @@ function paginate ($db, $query) {
                         case "CanCon":
                             if($entry['Custom1']=='Yes' || $entry['Custom1']=='yes'){
                                 $CanCon = '&#x2713;';
+                                $canConClass = "cancon";
                             } else {
                                 $CanCon = '&#x2717;';
+                                $canConClass = "notCanCon";
                             }
-                            printf("<td>$CanCon</td>");
+                            printf("<td class='$canConClass'>$CanCon</td>");
                             break;
                         case "TrackNumber":
-                            printf("<td>%s</td>", $entry[$column]);
+                            printf("<td class='notCanCon'>%s</td>", $entry[$column]);
                             break;
                         case "Genre":
                             printf("<td><a href='browse.php?by=genre&genre=%s'>%s</a></td>", $entry[$column], $entry[$column]);
