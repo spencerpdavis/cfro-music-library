@@ -66,7 +66,6 @@ function paginate ($db, $query) {
 
 		// Prepare paged query
 		$prepared_query = $query . ' LIMIT ' . $limit . ' OFFSET ' . $offset;
-        echo $prepared_query;
 		
 		$stmt = $db->prepare($prepared_query);
 
