@@ -66,6 +66,7 @@ function paginate ($db, $query) {
 
 		// Prepare paged query
 		$prepared_query = $query . ' LIMIT ' . $limit . ' OFFSET ' . $offset;
+        echo $prepared_query;
 		
 		$stmt = $db->prepare($prepared_query);
 
@@ -108,6 +109,7 @@ function paginate ($db, $query) {
 		}
 		
 		// Any results?
+
 		if ($stmt_total > 0) {
 			// Define how we want to fetch results
 			printf("<table align=center class=results>");
@@ -146,7 +148,7 @@ function paginate ($db, $query) {
                             printf("<td class='$canConClass'>$CanCon</td>");
                             break;
                         case "TrackNumber":
-                            printf("<td class='notCanCon'>%s</td>", $entry[$column]);
+                            printf("<td>%s</td>", $entry[$column]);
                             break;
                         case "Genre":
                             printf("<td><a href='browse.php?by=genre&genre=%s'>%s</a></td>", $entry[$column], $entry[$column]);
