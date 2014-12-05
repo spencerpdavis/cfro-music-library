@@ -87,18 +87,18 @@ function paginate ($db, $query) {
 			case "recent":
 			case "browse":
             case "genre":
-				$column_names = array("Artist", "Album", "Genre", "Date Added", "CanCon");
-				$columns = array("Artist", "Album", "Genre", "DateAdded", "CanCon");
+				$column_names = array("Artist", "Album", "Genre", "CRTC Category", "Date Added", "CanCon");
+				$columns = array("Artist", "Album", "Genre", "CRTCCategory", "DateAdded", "CanCon");
 				break;
 
 			case "Artist":
-				$column_names = array("Album", "Genre", "Date Added", "CanCon");
-				$columns = array("Album", "Genre", "DateAdded", "CanCon");
+				$column_names = array("Album", "Genre", "CRTC Category", "Date Added", "CanCon");
+				$columns = array("Album", "Genre", "CRTCCategory", "DateAdded", "CanCon");
 				break;
 
 			case "search":
-				$column_names = array("Song Title", "Artist", "Album", "Genre", "CanCon");
-				$columns = array("SongTitle", "Artist", "Album", "Genre", "CanCon");
+				$column_names = array("Song Title", "Artist", "Album", "Genre", "CRTC Category", "CanCon");
+				$columns = array("SongTitle", "Artist", "Album", "Genre", "CRTCCategory", "CanCon");
 				break;
 
 			case "album":
@@ -151,6 +151,10 @@ function paginate ($db, $query) {
                         case "Genre":
                             printf("<td><a href='browse.php?by=genre&genre=%s'>%s</a></td>", $entry[$column], $entry[$column]);
                             break;
+                        case "CRTCCategory":
+                            printf("<td><a href='browse.php?by=Artist&genre=&CRTCcategory=%s'>%s</a></td>", $entry["Custom2"], $entry["Custom2"]);
+                            break;
+
 						case "Artist":
 							printf("<td><a href='%s.php?%s=%s'>%s</td>", $column, $column, $entry['Artist'], $entry[$column]);
 							break;

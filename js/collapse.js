@@ -6,8 +6,8 @@ $(".side-collapsible > li > a").on("click", function(e) {
     if(!$(this).hasClass("active")) {
 
         // hide any open menus and remove active classes
-        $(".side-collapsible li ul").slideUp(350);
-        $(".side-collapsible li a").removeClass("active");
+     //   $(".side-collapsible li ul").slideUp(350);
+     //   $(".side-collapsible li a").removeClass("active");
 
         // open submenu and add the active class
         $(this).next("ul").slideDown(350);
