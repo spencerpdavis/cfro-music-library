@@ -3,8 +3,7 @@
 	require("headers/main_header.php");
 	require("headers/function_header.php");
 	
-	$album = explode('=', urldecode(parse_url($_SERVER['REQUEST_URI'])["query"]));
-	$album = end($album);
+	$album = $_GET['album'];
 	
 	$album_name = $db->query("SELECT Album FROM Songs WHERE IDAlbum COLLATE NOCASE = '$album' GROUP BY Album COLLATE NOCASE");
 	$album_name = $album_name->fetchArray();
