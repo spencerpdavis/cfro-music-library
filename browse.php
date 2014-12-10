@@ -4,7 +4,7 @@
 	include("headers/function_header.php");
 ?>
     <?
-    // Find out what is being browsed
+    // Find out if being browsed by artist/album
     try{
         $get_by = $_GET["by"];
         if(is_null($get_by)){$get_by = "Artist";}
@@ -17,8 +17,8 @@
     } catch (Exception $e) {
         $get_letter = '';
     }
-
-   try{
+    // Find out if being browsed by genre
+    try{
         $get_genre = $_GET["genre"];
     } catch (Exception $e) {
         $get_genre = '';

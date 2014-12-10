@@ -1,4 +1,10 @@
 <?php
+function getUrl() {
+      $url  = @( $_SERVER["HTTPS"] != 'on' ) ? 'http://'.$_SERVER["SERVER_NAME"] :  'https://'.$_SERVER["SERVER_NAME"];
+      $url .= ( $_SERVER["SERVER_PORT"] !== 80 ) ? ":".$_SERVER["SERVER_PORT"] : "";
+      $url .= $_SERVER["REQUEST_URI"];
+      return $url;
+}
 // Open database
 require("settings.php");
 $db = new SQLite3($database_file);
@@ -37,21 +43,16 @@ function paginate ($db, $query) {
 		
 	
 		// Items per page
-        $limit = 20;
+        $limit = 5;
 		
 		// Total pages
         $pages = ceil($total / $limit);
 
         // Current page
-        $page = min($pages, filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT, array(
-        	'option' => array(
-            'default' => 1,
-            'min_range' => 1,
-			),
-		)));
-
+        $page = $_GET["page"]; 
         if(is_null($page))
             $page = 1;
+
 		
 		// Calculate offset for query
 		$offset = ($page - 1) * $limit;
@@ -60,9 +61,14 @@ function paginate ($db, $query) {
 		$start = $offset + 1;
 		$end = min(($offset + $limit), $total);
 
+		$url = parse_url($_SERVER['REQUEST_URI'])["path"];
+        if($albumId = $_GET['album']){
+            $url = $url . "?album=$albumId";
+        }
+         
 		// "back" link
-		$prevLink = ($page > 1) ? '<a href="?page=1" title="First page">&laquo;</a> <a href="?page=' . ($page - 1) . '" title="Previous page">&lsaquo;</a>' : '<span class="disabled">&laquo;</span> <span class="disabled">&lsaquo;</span>';
-		$nextLink = ($page < $pages) ? '<a href="?page=' . ($page + 1) . '" title="Next page">&rsaquo;</a> <a href="?page=' . $pages . '" title="Last page">&raquo;</a>' : '<span class="disabled">&rsaquo;</span> <span class="disabled">&raquo;</span>';
+		$prevLink = ($page > 1) ? '<a href="' . $url . '&page=1" title="First page">&laquo;</a> <a href="' . $url . '&page=' . ($page - 1) . '" title="Previous page">&lsaquo;</a>' : '<span class="disabled">&laquo;</span> <span class="disabled">&lsaquo;</span>';
+		$nextLink = ($page < $pages) ? '<a href="' . $url . '&page=' . ($page + 1) . '" title="Next page">&rsaquo;</a> <a href="' . $url . '&page=' . $pages . '" title="Last page">&raquo;</a>' : '<span class="disabled">&rsaquo;</span> <span class="disabled">&raquo;</span>';
 
 		// Prepare paged query
 		$prepared_query = $query . ' LIMIT ' . $limit . ' OFFSET ' . $offset;
@@ -78,12 +84,10 @@ function paginate ($db, $query) {
 			$stmt_total++;
 
 		// Find page to determine columns
-		$url = parse_url($_SERVER['REQUEST_URI'])["path"];
-		$exploded_page = explode('/', $url);
-		$page = substr(end($exploded_page), 0, -4);
+        $pageType = substr(basename($_SERVER['PHP_SELF']), 0, -4);
 		
 		// Set columns
-		switch ($page) {
+		switch ($pageType) {
 			case "recent":
 			case "browse":
             case "genre":
@@ -91,7 +95,7 @@ function paginate ($db, $query) {
 				$columns = array("Artist", "Album", "Genre", "CRTCCategory", "DateAdded", "CanCon");
 				break;
 
-			case "Artist":
+			case "artist":
 				$column_names = array("Album", "Genre", "CRTC Category", "Date Added", "CanCon");
 				$columns = array("Album", "Genre", "CRTCCategory", "DateAdded", "CanCon");
 				break;
@@ -157,7 +161,7 @@ function paginate ($db, $query) {
                             break;
 
 						case "Artist":
-							printf("<td><a href='%s.php?%s=%s'>%s</td>", $column, $column, $entry['Artist'], $entry[$column]);
+							printf("<td><a href='artist.php?%s=%s'>%s</td>", $column, $entry['Artist'], $entry[$column]);
 							break;
                         default:
                             printf("<td>%s</td>", $entry[$column]);

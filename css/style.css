@@ -130,9 +130,13 @@ nav a:hover{
 
 .sidebar{
     background: #A9A9A9;
-    width: 250px;
+    width: 275px;
     float: left;
     margin-top: 5px;
+}
+
+.sidebar h2 {
+    color: black;
 }
 
 .letterbar{
