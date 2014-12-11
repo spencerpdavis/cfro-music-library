@@ -33,6 +33,7 @@
     // Get genres and categories
     $genre_query = "SELECT * FROM Genres";
     $genres = $db->query($genre_query);
+    array_push($genre, "All");
     $CRTCcat = [
         "all" => "All",
         "pop, rock, dance" => "Pop, Rock, Dance",
@@ -85,26 +86,28 @@
     <aside class="letterbar">
         <ul class="letters">
         <?foreach($alpha as $let) {
-	    	printf("<li><a href='browse.php?by=$get_by&letter=$let&genre=$get_genre&CRTCcategory=$get_cat'> $let</a></li> ");
-    	}?>
+            if($get_letter == $let){
+	    	printf("<li class='selected'><a href='browse.php?by=$get_by&letter=$let&genre=$get_genre&CRTCcategory=$get_cat'> $let</a></li> ");
+            } else { 
+printf("<li><a href='browse.php?by=$get_by&letter=$let&genre=$get_genre&CRTCcategory=$get_cat'> $let</a></li> ");
+    	}}?>
     </aside>
     <aside class="sidebar"></span>
         <ul class="side-collapsible">
         <li class="side-header">Browse by</a>
         <li class="side-dropdown"><a class="" href="#">Artist/Album<span class="caret"></span></a>
             <ul>
-                <?printf("<li><a href='browse.php?by=Artist&letter=$get_letter&genre=$get_genre&CRTCcategory=$get_cat'>Browse by Artist</a></li>");
-                printf("<li><a href='browse.php?by=Album&letter=$get_letter&genre=$get_genre&CRTCcategory=$get_cat'>Browse by Album</a></li>");
-                ?>
+                <li <?if($get_by == "Artist"){echo "class=selected";}?>><a href='browse.php?by=Artist&letter=<?echo $get_letter?>&genre=<?echo $get_genre?>&CRTCcategory=<?echo $get_cat?>'>Browse by Artist</a></li>
+                <li <?if($get_by == "Album"){echo "class=selected";}?>><a href='browse.php?by=Album&letter=<?echo $get_letter?>&genre=<?echo $get_genre?>&CRTCcategory=<?echo $get_cat?>'>Browse by Album</a></li>
             </ul>
         </li>
         <li class="side-dropdown"><a class="" href="#">Genres<span class="caret"></span></a>
                 <ul>
-                <?php
-                printf("<li><a href='browse.php?by=$get_by&letter=$get_letter&genre=all&CRTCcategory='>All</a></li>");
+                <li <?if($get_genre=="all"){echo "class=selected";}?>><a href='browse.php?by=<?echo $get_by?>&letter=<?echo $get_letter?>&genre=all&CRTCcategory='>All</a></li>
+                <?
                 while ($row = $genres->fetchArray()) {
                     if($row["GenreName"] == $get_genre){
-                        printf("<li class='selected_genre'><a href='browse.php?by=$get_by&letter=$get_letter&genre=%s&CRTCcategory='>%s</a></li>", $row["GenreName"], $row["GenreName"]);
+                        printf("<li class='selected'><a href='browse.php?by=$get_by&letter=$get_letter&genre=%s&CRTCcategory='>%s</a></li>", $row["GenreName"], $row["GenreName"]);
                     }else{printf("<li><a href='browse.php?by=$get_by&letter=$get_letter&genre=%s&CRTCcategory='>%s</a></li>", $row["GenreName"], $row["GenreName"]);
                     }
                 }
@@ -116,7 +119,12 @@
             <ul>
             <?php
             foreach($CRTCcat as $get => $cat) {
-            printf("<li><a href='browse.php?by=$get_by&letter=$get_letter&genre=&CRTCcategory=%s'>%s</a></li>", $get, $cat);
+                if($get == $get_cat) {
+                    printf("<li class='selected'><a href='browse.php?by=$get_by&letter=$get_letter&genre=&CRTCcategory=%s'>%s</a></li>", $get, $cat);
+                }
+                else{
+                    printf("<li><a href='browse.php?by=$get_by&letter=$get_letter&genre=&CRTCcategory=%s'>%s</a></li>", $get, $cat);
+                }
             }?>
             </ul>
         </li>

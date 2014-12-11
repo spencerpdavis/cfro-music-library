@@ -153,12 +153,22 @@ nav a:hover{
     text-align: center;
 }
 
-.letterbar ul li {
+.letterbar li {
  border: 1px solid #bbb;
    display: inline;
 }
 
-.letterbar ul li a {
+.letterbar ul .letters li .selected a {
+    color: black;
+    background: #FFF5A7;
+}
+
+.letterbar ul .letters li .selected a:hover {
+    color: black;
+    background: #FFF5A7;
+}
+ 
+.letterbar li a {
     text-decoration: none;
     padding-left: .2em ;
     padding-right: .2em;
@@ -167,11 +177,12 @@ nav a:hover{
     text-size: 30px;
 }
 
-.letterbar ul li a:hover {
+.letterbar li a:hover {
     text-decoration: none;
     background: #F8F8F8; 
 }
-    
+ 
+  
 /* remove list style */
 .side-collapsible {
     list-style: none;
@@ -184,6 +195,15 @@ nav a:hover{
     color: #666;
     padding: 4px 12px;
     border: 1px solid #bbb;
+}
+
+.side-collapsible li .selected a {
+    color: black;
+    background: #FFF5A7;
+}
+.side-collapsible li .selected a:hover {
+    color: black;
+    background: #FFF5A7;
 }
 
 /*set border for every line of menu and remove top border*/
@@ -212,7 +232,7 @@ nav a:hover{
 .side-collapsible li ul {
     list-style: none;
     background: #D3D3D3;
-    display: none;
+ /*   display: none;*/
     margin: 0;
     padding: 0;
 }

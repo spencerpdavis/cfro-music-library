@@ -39,10 +39,12 @@
 ?>
     <aside class="sidebar">
         <h2>Simple Search</h2>
+        <table border=0><tr><td align=right nowrap>
         <form method='GET' action='' name='simple_search'>
-            <input type=text name='simple_search' value='<?echo $simple_search;?>'>
+            Search term <input type=text name='simple_search' value='<?echo $simple_search;?>'><br>
             <input type=submit value='Simple Search' action='search.php'>
         </form>
+        </table>
         <hr>
         <h2>Advanced Search</h2>
         <table border=0><tr><td align=right nowrap>
