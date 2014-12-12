@@ -88,7 +88,7 @@
         <li>
         <ul>
         <?foreach($alpha as $let) {
-            if($get_letter == $let){
+            if($_GET['letter'] == $let){
 	    	printf("<li class='selected'><a href='browse.php?by=$get_by&letter=$let&genre=$get_genre&CRTCcategory=$get_cat'> $let</a></li> ");
             } else { 
 printf("<li><a href='browse.php?by=$get_by&letter=$let&genre=$get_genre&CRTCcategory=$get_cat'> $let</a></li> ");
