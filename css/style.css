@@ -154,21 +154,22 @@ nav a:hover{
 }
 
 .letterbar li {
- border: 1px solid #bbb;
    display: inline;
 }
 
-.letterbar ul .letters li .selected a {
-    color: black;
-    background: #FFF5A7;
+.letter-wrapper li{
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+.letters {
+    list-style: none;
+    font-family: 'HelveticaNeue', Arial, Helvetica, sans-serif;
+    font-size: 18px;
 }
 
-.letterbar ul .letters li .selected a:hover {
-    color: black;
-    background: #FFF5A7;
-}
- 
-.letterbar li a {
+
+.letters li a {
     text-decoration: none;
     padding-left: .2em ;
     padding-right: .2em;
@@ -177,11 +178,20 @@ nav a:hover{
     text-size: 30px;
 }
 
-.letterbar li a:hover {
+.letters li a:hover {
     text-decoration: none;
     background: #F8F8F8; 
 }
  
+ .letters li .selected a {
+    color: black;
+    background: #FFF5A7;
+}
+
+.letters li .selected a:hover {
+    color: black;
+    background: #FFF5A7;
+}
   
 /* remove list style */
 .side-collapsible {
