@@ -1,4 +1,6 @@
 <?php
+
+// Get the current URL
 function getUrl() {
       $url  = @( $_SERVER["HTTPS"] != 'on' ) ? 'http://'.$_SERVER["SERVER_NAME"] :  'https://'.$_SERVER["SERVER_NAME"];
       $url .= ( $_SERVER["SERVER_PORT"] !== 80 ) ? ":".$_SERVER["SERVER_PORT"] : "";
@@ -13,7 +15,7 @@ if(!$db) {
 } 
 if (!$db) die ($error);
 
-//Convert delphi time
+//Convert delphi time, used to convert MediaMonkey times
 function convert_delphi($delphiDate){
 	$days = intval($delphiDate)-25568;
 	$fraction = '' + $delphiDate;
@@ -22,8 +24,8 @@ function convert_delphi($delphiDate){
 	$date = date('F j, Y', mktime(0, 0, $sec, 1, $days, 1970));
 	return $date;
 }
-// Convert seconds to minutes:seconds
 
+// Convert seconds to minutes:seconds
 function milliToSeconds($milli) {
 	$minutes = round($milli/60000, 0, PHP_ROUND_HALF_DOWN);
 	$seconds = round(($milli - ($minutes * 60)) / 1000) % 60;
@@ -49,10 +51,11 @@ function paginate ($db, $query) {
         $pages = ceil($total / $limit);
 
         // Current page
-        $page = $_GET["page"]; 
-        if(is_null($page))
+        if(isset($_GET['page'])){
+            $page = $_GET["page"]; 
+        } else {
             $page = 1;
-
+        }
 		
 		// Calculate offset for query
 		$offset = ($page - 1) * $limit;
@@ -62,7 +65,8 @@ function paginate ($db, $query) {
 		$end = min(($offset + $limit), $total);
 
 		$url = parse_url($_SERVER['REQUEST_URI'])["path"];
-        if($albumId = $_GET['album']){
+        if(isset($_GET['album'])){
+            $albumId = $_GET['album'];
             $url = $url . "?album=$albumId";
         }
          
@@ -91,8 +95,8 @@ function paginate ($db, $query) {
 			case "recent":
 			case "browse":
             case "genre":
-				$column_names = array("Artist", "Album", "Genre", "CRTC Category", "Date Added", "CanCon");
-				$columns = array("Artist", "Album", "Genre", "CRTCCategory", "DateAdded", "CanCon");
+				$column_names = array("Artist", "Album", "Genre", "CRTC Category", "CanCon", "Date Added",);
+				$columns = array("Artist", "Album", "Genre", "CRTCCategory", "CanCon", "DateAdded");
 				break;
 
 			case "artist":

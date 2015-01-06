@@ -6,7 +6,7 @@
 	$recent_query = "SELECT * FROM Songs GROUP BY Album COLLATE NOCASE ORDER BY DateAdded DESC";
 ?>
 <body>
-	<h2>Recent Additions</h2>
+	<h2>Recently Added</h2>
     <article>
 	<?php
 		paginate($db, $recent_query)

@@ -60,7 +60,7 @@
         </table>
     </aside>
     <article>
-        <?php	paginate($db, $query);?>
+        <?php	if(isset($query)){paginate($db, $query);}?>
     </article>
 </body>
 </html>

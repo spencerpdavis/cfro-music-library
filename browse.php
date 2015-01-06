@@ -5,35 +5,36 @@
 ?>
     <?
     // Find out if being browsed by artist/album
-    try{
-        $get_by = $_GET["by"];
+    if(isset($_GET['by'])){
+        $get_by = $_GET['by'];
         if(is_null($get_by)){$get_by = "Artist";}
-    } catch (Exception $e) {
+    } else{
         $get_by = "Artist";
     }
-    try{
-        $get_letter = $_GET["letter"];
+
+    if(isset($_GET['letter'])){
+        $get_letter = $_GET['letter'];
         if($get_letter == "All"){$get_letter='';}
-    } catch (Exception $e) {
+    } else {
         $get_letter = '';
     }
     // Find out if being browsed by genre
-    try{
-        $get_genre = $_GET["genre"];
-    } catch (Exception $e) {
+    if(isset($_GET['genre'])){
+        $get_genre = $_GET['genre'];
+    } else {
         $get_genre = '';
     }
 
-    try{
-        $get_cat = $_GET["CRTCcategory"];
-    } catch (Exception $e) {
+    if(isset($_GET['CRTCcategory'])){
+        $get_cat = $_GET['CRTCcategory'];
+    } else {
         $get_cat = '';
     }
 
     // Get genres and categories
     $genre_query = "SELECT * FROM Genres";
     $genres = $db->query($genre_query);
-    array_push($genre, "All");
+
     $CRTCcat = [
         "all" => "All",
         "pop, rock, dance" => "Pop, Rock, Dance",
@@ -88,7 +89,7 @@
         <li>
         <ul>
         <?foreach($alpha as $let) {
-            if($_GET['letter'] == $let){
+            if($get_letter == $let){
 	    	printf("<li class='selected'><a href='browse.php?by=$get_by&letter=$let&genre=$get_genre&CRTCcategory=$get_cat'> $let</a></li> ");
             } else { 
 printf("<li><a href='browse.php?by=$get_by&letter=$let&genre=$get_genre&CRTCcategory=$get_cat'> $let</a></li> ");
