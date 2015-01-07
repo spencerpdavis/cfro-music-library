@@ -52,7 +52,7 @@ function paginate ($db, $query) {
 
         // Current page
         if(isset($_GET['page'])){
-            $page = $_GET["page"]; 
+            $page = sqlite_escape_string($_GET['page']); 
         } else {
             $page = 1;
         }
@@ -66,7 +66,7 @@ function paginate ($db, $query) {
 
 		$url = parse_url($_SERVER['REQUEST_URI'])["path"];
         if(isset($_GET['album'])){
-            $albumId = $_GET['album'];
+            $albumId = sqlite_escape_string($_GET['album']);
             $url = $url . "?album=$albumId";
         }
          
