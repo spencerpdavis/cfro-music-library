@@ -4,10 +4,17 @@
 	require("headers/main_header.php");
 	require("headers/function_header.php");	
 
-    $simple_search = $artist_name = $album_name = $genre = $year = $song_title = '';
-
-	if(isset($_GET["simple_search"])) {
-        $simple_search = $_GET["simple_search"];
+    $simple_search = SQLite3::escapeString($_GET['simple_search']);
+    $advanced_search = SQLite3::escapeString($_GET['advanced_search']);
+    $artist_name = SQLite3::escapeString($_GET['artist_name']);
+    $album_name =SQLite3::escapeString($_GET['album_name']);
+    $genre = SQLite3::escapeString($_GET["genre"]);
+    $year = SQLite3::escapeString($_GET["year"]);
+	$song_title = SQLite3::escapeString($_GET["song_title"]);
+    $cancon = SQLite3::escapeString($_GET['cancon']);
+    $crtc = SQLite3::escapeString($_GET['crtc']);
+    
+	if(!empty($simple_search)) {
 		$search = "%" . $simple_search . "%";
 		$query = "SELECT * FROM Songs WHERE 
 					Artist LIKE '$search' OR 
@@ -15,24 +22,29 @@
                     Genre LIKE '$search' OR
 					SongTitle LIKE '$search' OR
 					Year LIKE '$search'";
-	} else if (isset($_GET["advanced_search"])) {
+	} else if (!empty($advanced_search)) {
 		$query = "SELECT * FROM Songs WHERE ";
-		if(!($artist_name = $_GET["artist_name"]) == ''){
+		if(!empty($artist_name)){
 			$query = $query . "Artist LIKE '%$artist_name%' AND ";
 		}
-		if(!($album_name = $_GET["album_name"] == '')){
+		if(!empty($album_name)){
 			$query = $query . "Album LIKE '%$album_name%' AND ";
 		}
-		if(!($genre = $_GET["genre"] == '')){
+		if(!empty($genre)){
 			$query = $query . "Genre LIKE '%$genre%' AND ";
 		}
-		if(!($year = $_GET["year"]) == ''){
+		if(!empty($year)){
 			$query = $query . "Year LIKE '%$year%' AND ";
 		}
-		if(!($song_title = $_GET["song_title"] == '')){
+		if(!empty($song_title)){
 			$query = $query . "SongTitle LIKE '%$song_title%' AND ";
 		}
-		
+        if(!empty($cancon)){
+            $query = $query . "Custom1 LIKE '$cancon' AND ";
+		}
+        if(!empty($crtc)){
+            $query = $query . "Custom2 LIKE '$crtc' AND ";
+        }
 		$query = substr($query, 0, -4);
 	}
 		
@@ -55,6 +67,11 @@
             Genre <input type=text name='genre' value="<?echo $genre;?>"><br>
             Year <input type=text name='year' value="<?echo $year;?>"><br>
             Song Title <input type=text name='song_title'><br>
+            CRTC Category <select name="crtc">
+                <?foreach($CRTCcat as $get => $cat) {
+                    echo "<option value='$get'>$cat</option>";
+                }?></select><br>
+            Canadian Content Only <input type="checkbox" name="cancon" value="yes"><br>
             <input type=submit value='Advanced Search' action='search.php'>
         </form>
         </table>

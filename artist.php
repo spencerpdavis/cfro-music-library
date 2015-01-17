@@ -4,7 +4,7 @@
     require("headers/main_header.php");
     require("headers/function_header.php");
         
-    $artist = $_GET["Artist"];
+    $artist = SQLite3::escapeString($_GET["Artist"]);
                     
     $artist_query = "SELECT * FROM Songs WHERE Artist = '$artist' COLLATE NOCASE GROUP BY Album COLLATE NOCASE";
 ?>

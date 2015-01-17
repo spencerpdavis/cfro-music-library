@@ -33,6 +33,29 @@ function milliToSeconds($milli) {
 	return $minSecs;
 }
 
+// Check if list item is selected
+function list_selected($variable, $value) {
+    if($variable == $value){
+        echo "<li class='selected'>";
+    } else {
+        echo "<li>";
+    }
+}
+
+//CRTC Categories
+ $CRTCcat = [
+    "all" => "All",
+    "pop, rock, dance" => "Pop, Rock, Dance",
+    "country" => "Country",
+    "acoustic" => "Acoustic",
+    "concert" => "Concert",
+    "folk" => "Folk, Folk-Oriented",
+    "world beat and international" => "World Beat and International",
+    "jazz/blues" => "Jazz/Blues",
+    "gospel" => "Gospel",
+    "experimental" => "Experimental",
+];
+
 //Pagination function
 function paginate ($db, $query) {
 
@@ -45,15 +68,14 @@ function paginate ($db, $query) {
 		
 	
 		// Items per page
-        $limit = 20;
+        $limit = 5;
 		
 		// Total pages
         $pages = ceil($total / $limit);
 
         // Current page
-        if(isset($_GET['page'])){
-            $page = sqlite_escape_string($_GET['page']); 
-        } else {
+        $page = SQLite3::escapeString($_GET['page']);
+        if(empty($page)){
             $page = 1;
         }
 		
@@ -64,14 +86,19 @@ function paginate ($db, $query) {
 		$start = $offset + 1;
 		$end = min(($offset + $limit), $total);
 
-		$url = parse_url($_SERVER['REQUEST_URI'])["path"];
-        if(isset($_GET['album'])){
-            $albumId = sqlite_escape_string($_GET['album']);
+		$url = SQLite3::escapeString($_SERVER['REQUEST_URI']);
+        /*if(isset($_GET['album'])){
+            $albumId = $_GET['album'];
             $url = $url . "?album=$albumId";
+        }*/
+        if(empty(parse_url($_SERVER['REQUEST_URI'])['query'])){
+            $page_url = '?page=';
+        }else{
+            $page_url = '&page=';
         }
-         
+        $url = $url . $page_url;
 		// "back" link
-		$prevLink = ($page > 1) ? '<a href="' . $url . '&page=1" title="First page">&laquo;</a> <a href="' . $url . '&page=' . ($page - 1) . '" title="Previous page">&lsaquo;</a>' : '<span class="disabled">&laquo;</span> <span class="disabled">&lsaquo;</span>';
+		$prevLink = ($page > 1) ? '<a href="' . $url . '1" title="First page">&laquo;</a> <a href="' . $url . ($page - 1) . '" title="Previous page">&lsaquo;</a>' : '<span class="disabled">&laquo;</span> <span class="disabled">&lsaquo;</span>';
 		$nextLink = ($page < $pages) ? '<a href="' . $url . '&page=' . ($page + 1) . '" title="Next page">&rsaquo;</a> <a href="' . $url . '&page=' . $pages . '" title="Last page">&raquo;</a>' : '<span class="disabled">&rsaquo;</span> <span class="disabled">&raquo;</span>';
 
 		// Prepare paged query

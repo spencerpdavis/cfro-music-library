@@ -4,56 +4,38 @@
 	include("headers/function_header.php");
 ?>
     <?
-    // Find out if being browsed by artist/album
-    if(isset($_GET['by'])){
-        $get_by = $_GET['by'];
-        if(is_null($get_by)){$get_by = "Artist";}
+    // Find out if being browsed by artist/album. Default is by Artist
+
+    $get_by = SQLite3::escapeString($_GET['by']);
+    if(is_null($get_by)){$get_by = "Artist";
     } else{
         $get_by = "Artist";
     }
 
     // Array to build LIKE portion of query
     $like_array = array();
-    if(isset($_GET['letter'])){
-        $like_array[$get_by] = $_GET['letter'];
-        if($like_array[$get_by] == "All" || $like_array[$get_by] == ''){
-            unset($like_array[$get_by]);}
+
+    $like_array[$get_by] = SQLite3::escapeString($_GET['letter']);
+    if($like_array[$get_by] == "All" || $like_array[$get_by] == ''){
+            unset($like_array[$get_by]);
     } 
 
     // Find out if being browsed by genre
-    if(isset($_GET['genre']) && $_GET['genre'] !== ''){
-        $like_array['Genre'] = $_GET['genre'];
-        if($like_array['Genre'] == "all"){unset($like_array['Genre']);}
-    } 
+    $like_array['Genre'] = SQLite3::escapeString($_GET['genre']);
+    if($like_array['Genre'] == "all" || empty($like_array['Genre'])){unset($like_array['Genre']);}
+     
 
-    if(isset($_GET['CRTCcategory']) && $_GET['CRTCcategory'] !== ''){
-        $like_array['Custom2'] = $_GET['CRTCcategory'];
-    } 
+    $like_array['Custom2'] = SQLite3::escapeString($_GET['CRTCcategory']);
+    if($like_array['Custom2'] == "all" || empty($like_array['Custom2'])){unset($like_array['Custom2']);}
+    
+    $like_array['Custom1'] = SQLite3::escapeString($_GET['cancon']);
+    if(!($like_array['Custom1'] == 'yes')){unset($like_array['Custom1']);}
 
-    if(isset($_GET['cancon'])){
-        $like_array['Custom1'] = $_GET['cancon'];
-        if(!($get_cancon == 'yes' || $get_cancon =='Yes')){
-            $like_array['Custom1'] = '';
-        }
-    }
-
-    // Get genres and categories
+    // Get genres and categories for sidepane
     $genre_query = "SELECT * FROM Genres";
     $genres = $db->query($genre_query);
 
-    $CRTCcat = [
-        "all" => "All",
-        "pop, rock, dance" => "Pop, Rock, Dance",
-        "country" => "Country",
-        "acoustic" => "Acoustic",
-        "concert" => "Concert",
-        "folk" => "Folk, Folk-Oriented",
-        "world beat and international" => "World Beat and International",
-        "jazz/blues" => "Jazz/Blues",
-        "gospel" => "Gospel",
-        "experimental" => "Experimental",
-    ];
-    
+   
     // Variable for all letters
     $alpha = range('A', 'Z');
     array_unshift($alpha, "All");
@@ -65,6 +47,7 @@
         var_dump($like_array);
         echo "end " .  end($like_array) . "<br>";
         foreach($like_array as $column => $value){
+            echo $column . "->" . $value . "<br>";
             if($value !== ''){
                 if(end($like_array) !== $value){
                  if($column == "Artist" || $column == "Album"){
@@ -84,34 +67,6 @@
         }
     }
 
-    echo $query;
-
-
-    //People can browse by letter and either Genre OR CRTC Catagories, not both. 
-/*    if($get_letter != '')
-    {
-        $query = $query . " WHERE $get_by LIKE '$get_letter%'";
-        if($get_genre != ''){
-            if($get_genre != "all"){
-                $query = $query . " AND Genre LIKE '$get_genre' AND Custom1 LIKE '$get_cancon'";
-            }
-        } elseif($get_cat != ''){
-            if($get_cat != "all") {
-                $query = $query . " AND Custom2 LIKE '$get_cat'";
-            }
-        }
-    } else {
-        if($get_genre != ''){
-            if($get_genre != "all") {
-                $query = $query . " WHERE Genre LIKE '$get_genre'";
-            }
-        } elseif($get_cat != ''){
-            if ($get_cat != "all") {
-                $query = $query . " WHERE Custom2 LIKE '$get_cat'";
-            }
-        }
-    }
-*/
     // People can browse by either Artist or Album
     $query = $query . " GROUP BY $get_by COLLATE NOCASE";
     ?>
@@ -120,12 +75,11 @@
         <ul class="letters">
         <li>
         <ul>
-        <?foreach($alpha as $let) {
-            if(null !== isset($like_array['letter']) && $like_array['letter'] == $let){
-	    	printf("<li class='selected'><a href='browse.php?by=$get_by&letter=$let&genre=$get_genre&CRTCcategory=$get_cat'> $let</a></li> ");
-            } else { 
-printf("<li><a href='browse.php?by=$get_by&letter=$let&genre=$get_genre&CRTCcategory=$get_cat'> $let</a></li> ");
-    	}}?>
+        <?
+        foreach($alpha as $let) {
+            list_selected($like_array[$get_by], $let);
+            printf("<a href='browse.php?by=$get_by&letter=$let&genre=%s&CRTCcategory=%s&cancon=%s'> $let</a></li> ", $like_array['Genre'], $like_array['Custom2'], $like_array['Custom1']);
+    	}?>
         </ul>
         </li>
         </ul>
@@ -135,34 +89,35 @@ printf("<li><a href='browse.php?by=$get_by&letter=$let&genre=$get_genre&CRTCcate
         <li class="side-header">Browse by</a>
         <li class="side-dropdown"><a class="" href="#">Artist/Album<span class="caret"></span></a>
             <ul>
-                <li <?if($get_by == "Artist"){echo "class=selected";}?>><a href='browse.php?by=Artist&letter=<?echo $like_array['letter'];?>&genre=<?echo $get_genre?>&CRTCcategory=<?echo $get_cat?>'>Browse by Artist</a></li>
-                <li <?if($get_by == "Album"){echo "class=selected";}?>><a href='browse.php?by=Album&letter=<?echo $like_array['letter'];?>&genre=<?echo $get_genre?>&CRTCcategory=<?echo $get_cat?>'>Browse by Album</a></li>
+                <?list_selected($get_by, "Artist")?><a href='browse.php?by=Artist&letter=<?echo $like_array['letter'];?>&genre=<?echo $like_array['Genre']?>&CRTCcategory=<?echo $like_array['Custom2']?>'>Browse by Artist</a></li>
+                <?list_selected($get_by, "Album")?><a href='browse.php?by=Album&letter=<?echo $like_array['letter'];?>&genre=<?echo $like_array['Genre']?>&CRTCcategory=<?echo $like_array['Custom2']?>'>Browse by Album</a></li>
             </ul>
         </li>
+        <li class="side-dropdown"><a class="" href="#">Canadian Content<span class="caret"></span></a>
+            <ul>
+                <?
+                list_selected($like_array["Custom1"], '');
+                printf("<a href='browse.php?by=$get_by&letter=%s&genre=%s&cancon=&CRTCcategory=%s'>All</a></li>", $like_array["letter"], $row["GenreName"], $row["GenreName"], $like_array["Custom2"]);
+                list_selected($like_array["Custom1"], 'yes');
+                printf("<a href='browse.php?by=$get_by&letter=%s&genre=%s&cancon=yes&CRTCcategory=%s'>Canadian Content Only</a></li>", $like_array["letter"], $row["GenreName"], $row["GenreName"], $like_array["Custom2"]);
+            ?>
+            </ul>
         <li class="side-dropdown"><a class="" href="#">Genres<span class="caret"></span></a>
                 <ul>
-                <li <?if($get_genre=="all"){echo "class=selected";}?>><a href='browse.php?by=<?echo $get_by?>&letter=<?echo $like_array['letter']?>&genre=all&CRTCcategory='>All</a></li>
+                <li <?if($like_array['Genre']=="all"){echo "class=selected";}?>><a href='browse.php?by=<?echo $get_by?>&letter=<?echo $like_array['letter']?>&genre=all&CRTCcategory='>All</a></li>
                 <?
                 while ($row = $genres->fetchArray()) {
-                    if($row["GenreName"] == $get_genre){
-                        printf("<li class='selected'><a href='browse.php?by=$get_by&letter=%s&genre=%s&CRTCcategory='>%s</a></li>", $like_array["letter"], $row["GenreName"], $row["GenreName"]);
-                    }else{printf("<li><a href='browse.php?by=$get_by&letter=%s&genre=%s&CRTCcategory='>%s</a></li>", $like_array["letter"], $row["GenreName"], $row["GenreName"]);
-                    }
-                }
-
-                ?>
+                    list_selected($row["GenreName"], $like_array["Genre"]);
+                    printf("<a href='browse.php?by=$get_by&letter=%s&genre=%s&cancon=%s&CRTCcategory='>%s</a></li>", $like_array["letter"], $row["GenreName"], $like_array["Custom1"], $row["GenreName"]);
+               }?>
                 </ul>
             </li>
         <li class="side-dropdown"><a href="#">CRTC Categories</a>
             <ul>
             <?php
             foreach($CRTCcat as $get => $cat) {
-                if($get == $get_cat) {
-                    printf("<li class='selected'><a href='browse.php?by=$get_by&letter=%s&genre=&CRTCcategory=%s'>%s</a></li>", $like_array["letter"], $get, $cat);
-                }
-                else{
-                    printf("<li><a href='browse.php?by=$get_by&letter=%s&genre=&CRTCcategory=%s'>%s</a></li>", $like_array["letter"], $get, $cat);
-                }
+                list_selected($get, $like_array["Custom2"]);
+                printf("<a href='browse.php?by=$get_by&letter=%s&genre=&CRTCcategory=%s'>%s</a></li>", $like_array["letter"], $get, $cat);
             }?>
             </ul>
         </li>
