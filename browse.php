@@ -19,6 +19,9 @@
     if($like_array[$get_by] == "All" || $like_array[$get_by] == ''){
             unset($like_array[$get_by]);
     } 
+    if($like_array[$get_by] == "0-9"){
+        $like_array[$get_by] = '[0-9]';
+    }
 
     // Find out if being browsed by genre
     $like_array['Genre'] = SQLite3::escapeString($_GET['genre']);
@@ -38,16 +41,13 @@
    
     // Variable for all letters
     $alpha = range('A', 'Z');
-    array_unshift($alpha, "All");
+    array_unshift($alpha, "All", "0-9");
 
     // ***** Create query. ***** 
     $query = "SELECT * FROM Songs";
     if(!empty($like_array)){
         $query = $query . " WHERE ";
-        var_dump($like_array);
-        echo "end " .  end($like_array) . "<br>";
         foreach($like_array as $column => $value){
-            echo $column . "->" . $value . "<br>";
             if($value !== ''){
                 if(end($like_array) !== $value){
                  if($column == "Artist" || $column == "Album"){
