@@ -68,7 +68,7 @@ function paginate ($db, $query) {
 		
 	
 		// Items per page
-        $limit = 5;
+        $limit = 20;
 		
 		// Total pages
         $pages = ceil($total / $limit);

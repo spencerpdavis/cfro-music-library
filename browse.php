@@ -51,21 +51,23 @@
             if($value !== ''){
                 if(end($like_array) !== $value){
                  if($column == "Artist" || $column == "Album"){
-                     $query = $query . " $column LIKE '$value%' AND";
+                     $query = $query . " $column GLOB '$value*' AND";
                  } else {
-                     $query = $query . " $column LIKE '$value' AND";
+                     $query = $query . " $column GLOB '$value' AND";
                  }
               }
              else{
                   if($column == "Artist" || $column == "Album"){
-                     $query = $query . " $column LIKE '$value%'";
+                     $query = $query . " $column GLOB '$value*'";
                  } else {
-                     $query = $query . " $column LIKE '$value'";
+                     $query = $query . " $column GLOB '$value'";
                  }
              }
             }
         }
     }
+
+    echo $query . "<br>";
 
     // People can browse by either Artist or Album
     $query = $query . " GROUP BY $get_by COLLATE NOCASE";
@@ -102,7 +104,16 @@
                 printf("<a href='browse.php?by=$get_by&letter=%s&genre=%s&cancon=yes&CRTCcategory=%s'>Canadian Content Only</a></li>", $like_array["letter"], $row["GenreName"], $row["GenreName"], $like_array["Custom2"]);
             ?>
             </ul>
-        <li class="side-dropdown"><a class="" href="#">Genres<span class="caret"></span></a>
+         <li class="side-dropdown"><a href="#">CRTC Categories</a>
+            <ul>
+            <?php
+            foreach($CRTCcat as $get => $cat) {
+                list_selected($get, $like_array["Custom2"]);
+                printf("<a href='browse.php?by=$get_by&letter=%s&genre=&CRTCcategory=%s'>%s</a></li>", $like_array["letter"], $get, $cat);
+            }?>
+            </ul>
+        </li>
+       <li class="side-dropdown"><a class="" href="#">Genres<span class="caret"></span></a>
                 <ul>
                 <li <?if($like_array['Genre']=="all"){echo "class=selected";}?>><a href='browse.php?by=<?echo $get_by?>&letter=<?echo $like_array['letter']?>&genre=all&CRTCcategory='>All</a></li>
                 <?
@@ -112,15 +123,6 @@
                }?>
                 </ul>
             </li>
-        <li class="side-dropdown"><a href="#">CRTC Categories</a>
-            <ul>
-            <?php
-            foreach($CRTCcat as $get => $cat) {
-                list_selected($get, $like_array["Custom2"]);
-                printf("<a href='browse.php?by=$get_by&letter=%s&genre=&CRTCcategory=%s'>%s</a></li>", $like_array["letter"], $get, $cat);
-            }?>
-            </ul>
-        </li>
         </ul>
 
     </aside>

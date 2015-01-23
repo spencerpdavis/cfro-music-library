@@ -1,3 +1,3 @@
 <?php
-    $database_file = "MM.DB";
+    $database_file = 'MM.DB';
 ?>
